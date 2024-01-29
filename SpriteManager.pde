@@ -41,8 +41,12 @@ class SpriteManager {
                 Sprite a = active.get(i);
                 Sprite b = active.get(j);
                 if (a.team != b.team && collision(a, b)) {
-                    active.get(i).handleCollision();
-                    active.get(j).handleCollision();
+                    active.get(i).handleCollision(0);
+                    active.get(j).handleCollision(0);
+                }
+                else if (a.team == b.team && collision(a,b) && a.size.x > 5 && b.size.x > 5) {
+                  active.get(i).handleCollision(1);
+                  active.get(j).handleCollision(1);
                 }
             }
         }
@@ -58,8 +62,39 @@ class SpriteManager {
     
     boolean collision(Sprite a, Sprite b) {
         // assumes equal w and h
-        float r1 = a.size.x / 2.0;
+        /*float r1 = a.size.x / 2.0;
         float r2 = b.size.x / 2.0;
-        return r1 + r2 > dist(a.pos.x, a.pos.y, b.pos.x, b.pos.y);
+        return r1 + r2 > dist(a.pos.x, a.pos.y, b.pos.x, b.pos.y);*/
+        
+        float w1 = a.size.x;
+        float h1 = a.size.y;
+        float x1 = a.pos.x;
+        float y1 = a.pos.y;
+        float w2 = b.size.x;
+        float h2 = b.size.y;
+        float x2 = b.pos.x;
+        float y2 = b.pos.y;
+        boolean yCollision = false;
+        boolean xCollision = false;
+
+        if(w1 > w2) {
+          if( (x2>=x1 && x2<=(x1+w1)) || ((x2+w2)>=x1&&(x2+w2)<=(x1+w1))) {
+            xCollision = true;
+          }
+        } else {
+          if( (x1>=x2 && x1<=(x2+w2)) || ((x1+w1)>=x2&&(x1+w1)<=(x2+w2))) {
+            xCollision = true;
+          }
+        }
+        if(h1 > h2) {
+          if( (y2>=y1 && y2<=(y1+h1)) || ((y2+h2)>=y1&&(y2+h2)<=(y1+h1))) {
+            yCollision = true;
+          }
+        } else {
+          if( (y1>=y2 && y1<=(y2+h2)) || ((y1+h1)>=y2&&(h1+y1)<=(y2+h2))) {
+            yCollision = true;
+          }
+        }
+        return (xCollision && yCollision);
     }
 }

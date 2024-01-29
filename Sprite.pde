@@ -14,10 +14,12 @@ class Sprite {
     
     void display() {
         fill(255);
-        ellipse(pos.x, pos.y, size.x, size.y);
+        rect(pos.x, pos.y, size.x, size.y);
     }
     
-    void handleCollision() {
-        _SM.destroy(this);
+    void handleCollision(int type) { //type 0: bullet, type 1: platform (only applies to player)
+        if(type == 0) {
+          _SM.destroy(this);
+        }
     }
 }

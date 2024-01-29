@@ -4,6 +4,7 @@ class Invader extends Sprite {
     Invader(float x, float y) {
         super(x, y, 40, 40);
         vel = new PVector(5, 0); // moving right
+       
     }
     
     @Override // change directions left and right
