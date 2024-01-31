@@ -44,13 +44,26 @@ class Player extends Sprite {
     }
 
     @Override
-    void handleCollision(int type) {
+    void handleCollision(int type, String dir) {
        if(type == 1) {
           /*pos.y -= 3;
           vel.y = 0;
           jumps = 0;*/
+          if(dir.contains("r") || dir == "l") { //wall is on the right or left
+              pos.add(vel.x * -1, 0);
+          }
+          if(dir.contains("u")) { //wall is above
+              pos.add(0, vel.y*-1);
+              pos.add(0, 1);
+              vel.y = 0;
+          }
+          if(dir.contains("d")) { //wall is below
+              pos.add(0, -1);
+              vel.y = 0;
+          }
           
-          pos.add(vel.mult(-1));
+          
+          //pos.add(vel.mult(-2));
           vel.y = 0;
           jumps = 0;
           //vel = vel.mult(-1);

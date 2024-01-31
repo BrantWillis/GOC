@@ -5,7 +5,7 @@ class Block extends Sprite {
     }
     
     @Override
-    void handleCollision(int type) {
+    void handleCollision(int type, String dir) {
     
     }
     
