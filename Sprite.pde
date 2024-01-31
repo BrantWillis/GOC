@@ -16,9 +16,9 @@ class Sprite {
         
     }
     
-    void display() {
+    void display(float scroll) {
         fill(255);
-        rect(pos.x, pos.y, size.x, size.y);
+        rect(pos.x - scroll, pos.y, size.x, size.y);
     }
     
     void handleCollision(int type, String dir) { //type 0: bullet, type 1: platform (only applies to player)

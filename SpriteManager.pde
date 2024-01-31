@@ -3,6 +3,7 @@ class SpriteManager {
     
     ArrayList<Sprite> active = new ArrayList<Sprite>();
     ArrayList<Sprite> destroyed = new ArrayList<Sprite>();
+    float scroll = width/2;
     
     SpriteManager() {
         player = new Player(width / 2, height - 100);
@@ -26,13 +27,19 @@ class SpriteManager {
     
     void moveEverything() {
         for(int i = active.size() - 1; i >= 0; i--) {
-            active.get(i).update();           
+            active.get(i).update();  
+            if(active.get(i).size.x == 20 && active.get(i).size.y == 40 && scroll >= 0) { //is the player
+              scroll = active.get(i).pos.x - (width/2);
+            }
+            if(scroll <= 0) {
+              scroll = .00001;
+            }
         }
     }
     
     void drawEverything() {
         for (Sprite s : active)
-            s.display();
+            s.display(scroll);
     }
     
     void checkCollisions() {
@@ -136,11 +143,25 @@ class SpriteManager {
         float ox = o.pos.x;
         float oy = o.pos.y;
         
+        
+          //if(abs(p.vel.y) > 15) {            fill(255, 0, 0);}
+          //rect(0,100,10,p.vel.y *5);
+        
+        //rect(px/2,py/2,pw/2,ph/2);
         if(xCollision && yCollision) {
-          if(py < oy && py+ph > oy) fin += "d"; //platform below
-          if(py < oy+oh && py+ph > oy) fin += "u"; //platform above
-          if(px < ox && px+pw > ox) fin += "r"; //platform right
-          if(px > ox && px+pw < ox) fin += "l"; //platform left
+          //rect(ox/2,oy/2,ow/2,oh/2);
+          
+          if(py < oy && py+ph > oy && py+ph < oy+oh && py < oh+oy) {fin += "d"; rect(0,0,40,40);} //platform below
+          if(py < oy+oh && py+ph > oy && py+ph > oy+oh && py>oy) {
+          if(p.vel.y > 0) {
+              fin += "d"; 
+          } else {
+            fin += "u";
+          }
+            rect(40,0,40,40);
+          } //platform above
+          if(px < ox && px+pw > ox && px+pw < ox+ow && px < ox+ow) {fin += "r"; rect(40,50,40,40);} //platform right
+          if(px < ox+ow && px+pw > ox+ow && px>ox && px+pw > ox) {fin += "l"; rect(0,50,40,40);} //platform left
           
         }
         

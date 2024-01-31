@@ -29,7 +29,7 @@ class Player extends Sprite {
 
         //fix bounds
         if(pos.x < 0 + size.x/2) pos.x = size.x/2;
-        if(pos.x > width - size.x/2) pos.x = width - size.x/2;
+        //if(pos.x > width - size.x/2) pos.x = width - size.x/2;
         if(pos.y < 0 + size.y/2) pos.y = size.y/2;
         if(pos.y > height - size.y/2) pos.y = height-size.y/2;
 
@@ -37,11 +37,11 @@ class Player extends Sprite {
         vel.x *= .7;
     }
 
-    @Override
+    /*@Override
     void display() {
         fill(200, 0, 200);
         rect(pos.x, pos.y, size.x, size.y);
-    }
+    }*/
 
     @Override
     void handleCollision(int type, String dir) {
@@ -49,16 +49,20 @@ class Player extends Sprite {
           /*pos.y -= 3;
           vel.y = 0;
           jumps = 0;*/
-          if(dir.contains("r") || dir == "l") { //wall is on the right or left
-              pos.add(vel.x * -1, 0);
+          if(dir.contains("r") || dir.contains("l")) { //wall is on the right or left
+              pos.add(vel.x * -1.42857, 0);
+              vel.x = 0;
           }
           if(dir.contains("u")) { //wall is above
-              pos.add(0, vel.y*-1);
+              //pos.add(0, vel.y*-1);
               pos.add(0, 1);
               vel.y = 0;
           }
           if(dir.contains("d")) { //wall is below
-              pos.add(0, -1);
+              pos.add(0, vel.y* -1);
+              if(abs(vel.y) <= 1) {
+                pos.add(0,-1);
+              }
               vel.y = 0;
           }
           
