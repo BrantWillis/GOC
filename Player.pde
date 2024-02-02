@@ -4,6 +4,7 @@ class Player extends Sprite {
     boolean stuck = false;
     int lastDirection = 10;
     int jumps = 0;
+    PImage img;
     
     Player(float x, float y) {
         // super refers to the parent
@@ -49,11 +50,13 @@ class Player extends Sprite {
         stuck = false;
     }
 
-    /*@Override
-    void display() {
+    @Override
+    void display(float scroll) {
         fill(200, 0, 200);
-        rect(pos.x, pos.y, size.x, size.y);
-    }*/
+        img = loadImage("data/player.png");
+        //rect(pos.x - scroll, pos.y, size.x, size.y);
+        image(img, pos.x - scroll, pos.y, size.x, size.y);
+    }
 
     @Override
     void handleCollision(int type, String dir) {

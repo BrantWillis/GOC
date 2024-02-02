@@ -1,5 +1,6 @@
 class Invader extends Sprite {
   //team = 1;
+  PImage img;
     
     // constructor
     Invader(float x, float y) {
@@ -17,6 +18,12 @@ class Invader extends Sprite {
         vel.mult(-1);
         
       //}
+    }
+    
+    @Override
+    void display(float scroll) {
+      img = loadImage("data/spikes.png");
+      image(img, pos.x - scroll, pos.y, size.x, size.y);
     }
     
     @Override // change directions left and right

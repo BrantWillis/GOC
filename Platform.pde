@@ -4,6 +4,8 @@ class Block extends Sprite {
         team = 1;
     }
     
+    
+    
     @Override
     void handleCollision(int type, String dir) {
       
