@@ -1,12 +1,14 @@
+float scroll = width/2;
+
 class SpriteManager {
     Player player;
     
     ArrayList<Sprite> active = new ArrayList<Sprite>();
     ArrayList<Sprite> destroyed = new ArrayList<Sprite>();
-    float scroll = width/2;
+    //float scroll = width/2;
     
     SpriteManager() {
-        player = new Player(width / 2, height - 100);
+        player = new Player(width / 2, 660);
         spawn(player);
     }
     
@@ -27,7 +29,9 @@ class SpriteManager {
     
     void moveEverything() {
         for(int i = active.size() - 1; i >= 0; i--) {
-            active.get(i).update();  
+            //if(abs(active.get(i).pos.x - width/2 - scroll) < 700) {
+              active.get(i).update();  
+            //}
             if(active.get(i).size.x == 20 && active.get(i).size.y == 40 && scroll >= 0) { //is the player
               scroll = active.get(i).pos.x - (width/2);
             }
@@ -47,13 +51,17 @@ class SpriteManager {
             for (int j = i + 1; j < active.size(); j++) {
                 Sprite a = active.get(i);
                 Sprite b = active.get(j);
-                if (a.team != b.team && collision(a, b) == "e") {
+                if (a.team != b.team && collision(a, b,0) == "e") {
                     a.handleCollision(0, "e");
                     b.handleCollision(0, "e");
                 }
-                else if (a.team == b.team && (collision(a,b).contains("r") || collision(a,b).contains("l") || collision(a,b).contains("u") || collision(a,b).contains("d")) && a.size.x > 5 && b.size.x > 5) {
-                  a.handleCollision(1, collision(a,b));
-                  b.handleCollision(1, collision(a,b));
+                else if(collision(a,b,0).contains("b")) {
+                  a.handleCollision(0,"b");
+                  b.handleCollision(0,"b");
+                }
+                else if (a.team == b.team && (collision(a,b,0).contains("r") || collision(a,b,0).contains("l") || collision(a,b,0).contains("u") || collision(a,b,0).contains("d")) && a.size.x > 5 && b.size.x > 5) {
+                  a.handleCollision(1, collision(a,b,0));
+                  b.handleCollision(1, collision(a,b,0));
                 }
             }
         }
@@ -67,7 +75,7 @@ class SpriteManager {
         }
     }
     
-    String collision(Sprite a, Sprite b) {
+    String collision(Sprite a, Sprite b, int time) {
         // assumes equal w and h
         /*float r1 = a.size.x / 2.0;
         float r2 = b.size.x / 2.0;
@@ -151,20 +159,37 @@ class SpriteManager {
         if(xCollision && yCollision) {
           //rect(ox/2,oy/2,ow/2,oh/2);
           
-          if(py < oy && py+ph > oy && py+ph < oy+oh && py < oh+oy) {fin += "d"; rect(0,0,40,40);} //platform below
+          if(py < oy && py+ph > oy && py+ph < oy+oh && py < oh+oy) {
+            fin += "d"; rect(0,0,40,40);
+          } //platform below
           if(py < oy+oh && py+ph > oy && py+ph > oy+oh && py>oy) {
-          if(p.vel.y > 0) {
-              fin += "d"; 
-          } else {
-            fin += "u";
-          }
+            if(p.vel.y > 0) {
+                fin += "d"; 
+            } else {
+              fin += "u";
+            }
             rect(40,0,40,40);
           } //platform above
-          if(px < ox && px+pw > ox && px+pw < ox+ow && px < ox+ow) {fin += "r"; rect(40,50,40,40);} //platform right
-          if(px < ox+ow && px+pw > ox+ow && px>ox && px+pw > ox) {fin += "l"; rect(0,50,40,40);} //platform left
+          p.handleCollision(1, fin);
+          if(time == 0) {
+            collision(a,b,1);
+          }
+          if(px < ox && px+pw > ox && px+pw < ox+ow && px < ox+ow) {
+            //if(!fin.contains("d") && !fin.contains("u")) {
+              fin += "r"; rect(40,50,40,40);
+            //}
+              
+          } //platform right
+          if(px < ox+ow && px+pw > ox+ow && px>ox && px+pw > ox) {
+            //if(!fin.contains("d") && !fin.contains("u")) {
+              fin += "l"; rect(0,50,40,40);
+            //}
+          } //platform left
           
         }
-        
+        if(a.team != b.team && xCollision && yCollision) {
+          fin += "b";
+        }
         
         return (fin);
     }

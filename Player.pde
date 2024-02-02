@@ -1,6 +1,7 @@
 class Player extends Sprite {
     boolean left, right, up, down, shift;
     boolean onGround = true;
+    boolean stuck = false;
     int lastDirection = 10;
     int jumps = 0;
     
@@ -25,7 +26,17 @@ class Player extends Sprite {
         //if (down)  vel.add(new PVector(0, speed));
         // update the position by velocity
          vel.add(new PVector(0, 1));
-          pos.add(vel);
+         if(stuck) {
+           vel.y = 0;
+            
+         }
+         if(pos.y < 40) {
+           _SM.destroy(this);
+         }
+         pos.add(vel);
+          
+          if(vel.y > 3) jumps = 1;
+          rect(0,150,10,jumps*100);
 
         //fix bounds
         if(pos.x < 0 + size.x/2) pos.x = size.x/2;
@@ -35,6 +46,7 @@ class Player extends Sprite {
 
         // always try to decelerate
         vel.x *= .7;
+        stuck = false;
     }
 
     /*@Override
@@ -49,22 +61,28 @@ class Player extends Sprite {
           /*pos.y -= 3;
           vel.y = 0;
           jumps = 0;*/
-          if(dir.contains("r") || dir.contains("l")) { //wall is on the right or left
-              pos.add(vel.x * -1.42857, 0);
-              vel.x = 0;
-          }
+          stuck = false;
           if(dir.contains("u")) { //wall is above
               //pos.add(0, vel.y*-1);
               pos.add(0, 1);
               vel.y = 0;
           }
           if(dir.contains("d")) { //wall is below
-              pos.add(0, vel.y* -1);
+              pos.add(0, vel.y* -1.0001);
               if(abs(vel.y) <= 1) {
-                pos.add(0,-1);
+                //pos.add(0,-1);
               }
+              
               vel.y = 0;
           }
+          if(dir.contains("r") || dir.contains("l")) { //wall is on the right or left
+              pos.add(vel.x * -1.42857, 0);
+              vel.x = 0;
+              if(!dir.contains("u") && !dir.contains("d")) {
+                stuck = true;
+              } else {stuck = false;}
+          } else {stuck = false;}
+          
           
           
           //pos.add(vel.mult(-2));
@@ -97,7 +115,7 @@ class Player extends Sprite {
       if(key!=CODED) {
           switch(keyCode) { // key is a global value
               case 'a':
-              case ' ': if(jumps < 2) {vel.y = -15; jumps++;}break;
+              case ' ': if(jumps < 1) {vel.y = -15; jumps++;}break;
               case 'A': left = true; break;
               case 's':
               case 'S': down = true; break;
@@ -115,11 +133,12 @@ class Player extends Sprite {
         int xAngle = 0;
         int yAngle = 0;
         if(up) yAngle = -10;
+        if(down) yAngle = 10;
         if(left) {xAngle = -10;}
         if(right) {xAngle = 10;}
-        if(!up && xAngle == 0) xAngle = lastDirection;
+        if(!down && !up && xAngle == 0) xAngle = lastDirection;
         PVector aim = new PVector(xAngle, yAngle); // up
-        _SM.spawn(new Bullet(pos.x, pos.y, aim, team));
+        _SM.spawn(new Bull(pos.x, pos.y, aim, team));
     }
     
     void deathScreen() {}
