@@ -1,6 +1,1 @@
-# GOC
-Game of Circles (GOC)
-
-git add .  
-git commit -m "Describe the work you just did, briefly, like a tweet."  
-git push  
+This was a project I made for AP Computer Science A, originally based on a Game of Circles template provided by the teacher.
